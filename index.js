@@ -51,7 +51,6 @@ class Form
   }
   addRecord()
   {
-    console.log("1")
     let name = this.record_obj_name.value;
     let quantity = this.record_obj_quantity.value;
     let price = this.record_obj_price.value;
