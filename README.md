@@ -1,6 +1,6 @@
 # js-cezxvv
 
-[Edit on StackBlitz ⚡️](https://stackblitz.com/edit/js-cezxvv)
+[Edit on StackBlitz ⚡️](https://stackblitz.com/edit/paragon)
 
 Dany jest następujący dokument HTML: http://jsbin.com/vafebe/1/edit?html,output
 
