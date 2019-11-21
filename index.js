@@ -29,13 +29,29 @@ class Receipt
 
 class Record
 {
-  constructor(name, quantity, price)
+  constructor(name, quantity, price, receipt_size)
   {
     this.name = name;
     this.quantity = quantity;
     this.price = price;
+    // TODO: implement here
+    this.position = receipt_size+1;
   }
 
+  set record_name(new_name)
+  {
+    
+    this.name = new_name;
+  }
+  get record_name()
+  {
+    return this.name;
+  }
+  set record_quantity(new_quantity)
+  {
+    
+    this.quantity = new_quantity;
+  }
 }
 
 class Form
@@ -70,10 +86,10 @@ class Form
     
     // Jeżeli dane są prawidłowe, dodaj je do paragonu
 
-    if(this.validForm(name, quantity, price))
+    if(validString(name, this.record_obj_name) && validNumber(quantity,this.record_obj_quantity) && validNumber(price, this.record_obj_price))
     {
       let record = new Record(name,quantity,price);
-
+      
       // Wyzerowanie pól formularza
 
       this.record_obj_name.value = "";
@@ -88,32 +104,23 @@ class Form
 
     }
   }
+}
 
-  // Metoda waliduje dane podane w formularzu
-  validForm(name, quantity, price)
+  // Funkcja waliduje dane podane w formularzu
+  function validString(string, object)
   {
     
-    if(name.length <= 0 )
+    if(string.length <= 0 )
     {
-      alert("Invalid name")
-      this.record_obj_name.style.backgroundColor = "red";
+      alert("Invalid " + string.toString())
+      object.style.backgroundColor = "red";
       return false;
     }
-
-    if(!validateNumber(quantity, this.record_obj_quantity))
-    {
-      return false;
-    }
-    
-    if(!validateNumber(price, this.record_obj_price))
-    {
-      return false;
-    }
-    return true
+    return true;
   }
 
-  // Metoda waliduje liczby zmiennoprzecinkowe w formularzu
-  validateNumber(number, object)
+  // Funkcja waliduje liczby zmiennoprzecinkowe w formularzu
+  function validNumber(number, object)
   {
     if(isNaN(number))
     {
@@ -135,5 +142,4 @@ class Form
     }
     return true;
   }
-}
 let receipt = new Receipt()
