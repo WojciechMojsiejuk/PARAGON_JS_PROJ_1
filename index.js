@@ -22,19 +22,27 @@ class Receipt
     this.records = new Array();
     this.update = function()
     {
+      //get <body>
       let parent = document.getElementById("ProductList");
+      //Clear section
+
+      //Add section
+      //loop through rows
       for(let i=0;i<this.records.length;i++)
       {
         let row = parent.insertRow();
+        let cells = new Array();
+        //loop through cells
         for(let j=0;j<5;j++)
         {
-          let cell = row.insertCell(j);
-          cell.innerText = "TEST"
-          //console.log(cell.innerText);
+          cells.push(row.insertCell(j));
         }
-        // let row = document.createElement('tr');
-        // row.innerText = records[i].name;
-        // parent.insertBefore(null, row);
+        //index
+        cells[0].innerText = i.toString();
+        cells[1].innerText = this.records[i].name;
+        cells[2].innerText = this.records[i].quantity;
+        cells[3].innerText = this.records[i].price;
+        cells[4].innerText = "Not calculated";
       }
     }
     this.addRecord = function(name, quantity, price)
