@@ -17,15 +17,32 @@ function localStorageTest(){
 
 class Receipt
 {
-  constructor(records=[])
+  constructor()
   {
-    this.records = records;
+    this.records = new Array();
+    this.update = function()
+    {
+      let parent = document.getElementById("ProductList");
+      for(let i=0;i<this.records.length;i++)
+      {
+        let row = parent.insertRow();
+        for(let j=0;j<5;j++)
+        {
+          let cell = row.insertCell(j);
+          cell.innerText = "TEST"
+          //console.log(cell.innerText);
+        }
+        // let row = document.createElement('tr');
+        // row.innerText = records[i].name;
+        // parent.insertBefore(null, row);
+      }
+    }
     this.addRecord = function(name, quantity, price)
     {
       this.records.push(new Record(name, quantity, price));
+      this.update();
     }
   }
-
 }
 
 class Record
@@ -35,10 +52,8 @@ class Record
     this.name = name;
     this.quantity = quantity;
     this.price = price;
-    this.sum;
     // TODO: implement here
     this.position = receipt_size+1;
-    update_sum()
   }
   set record_name(new_name)
   {
@@ -50,31 +65,8 @@ class Record
   }
   set record_quantity(new_quantity)
   {
+    
     this.quantity = new_quantity;
-  }
-  get record_quantity()
-  {
-    return this.record_quantity
-  }
-  set record_price(new_price)
-  {
-    this.price = new_price
-  }
-  get record_price()
-  {
-    return this.price
-  }
-  set record_position(new_position)
-  {
-    this.position = new_position
-  }
-  get record_position()
-  {
-    return this.position
-  }
-  update_sum()
-  {
-    this.sum = Math.round(this.quantity*this.price, 2)
   }
 }
 class Form
@@ -114,6 +106,44 @@ class Form
     }
     this.add_record_button.onclick = this.addRecord.bind(this);
   }
+
+  // Metoda pobiera pola formularza, waliduje je i jeżeli dane są prawidłowe, dodaje je do struktury paragonu 
+  /*addRecord()
+  {
+    // Pobranie elementów
+
+    let name = this.record_obj_name.value;
+    let quantity = this.record_obj_quantity.value;
+    quantity = parseFloat(quantity.replace(',', '.'));
+    let price = this.record_obj_price.value;
+    price = parseFloat(price.replace(',', '.'));
+
+    // Czyszczenie styli
+
+    name.style.backgroundColor = null;
+    quantity.style.backgroundColor = null;
+    price.style.backgroundColor = null;
+    
+    // Jeżeli dane są prawidłowe, dodaj je do paragonu
+
+    if(validString(name, this.record_obj_name) && validNumber(quantity,this.record_obj_quantity) && validNumber(price, this.record_obj_price))
+    {
+      let record = new Record(name,quantity,price);
+      
+      // Wyzerowanie pól formularza
+
+      this.record_obj_name.value = "";
+      this.record_obj_quantity.value = "";
+      this.record_obj_price.value = "";
+
+      // Czyszczenie styli
+
+      this.record_obj_name.style.backgroundColor = null;
+      this.record_obj_quantity.style.backgroundColor = null;
+      this.record_obj_price.style.backgroundColor = null;
+
+    }
+  }*/
 }
 
   // Funkcja waliduje dane podane w formularzu
@@ -152,26 +182,6 @@ class Form
     }
     return true;
  }
-
-let receipt;
-let form;
-if(localStorageTest())
-{
-  
-  if(localStorage.records == undefined)
-  {
-    receipt = new Receipt();
-  }
-  else
-  {
-    receipt = new Receipt(JSON.parse(localStorage.records))
-  }
-  
-  form = new Form(receipt);
-}
-else
-{
-  alert("localStorage doesn't work your changes won't be saved")
-}
-
+let receipt = new Receipt()
+let Form = new Form(receipt);
 
