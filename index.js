@@ -19,12 +19,13 @@ class Receipt
 {
   constructor()
   {
-    
-    
+    this.records = new Array();
+    this.addRecord = function(name, quantity, price)
+    {
+      this.records.push(new Record(name, quantity, price));
+    }
   }
 
-
-  
 }
 
 class Record
@@ -37,10 +38,8 @@ class Record
     // TODO: implement here
     this.position = receipt_size+1;
   }
-
   set record_name(new_name)
   {
-    
     this.name = new_name;
   }
   get record_name()
@@ -53,18 +52,23 @@ class Record
     this.quantity = new_quantity;
   }
 }
-
 class Form
 {
-  constructor()
+  constructor(receipt)
   {
+    this.receipt = receipt;
     this.form_inputs = document.getElementsByTagName("input");
     this.record_obj_name = this.form_inputs[0];
     this.record_obj_quantity = this.form_inputs[1];
     this.record_obj_price = this.form_inputs[2];
     this.add_record_button = this.form_inputs[3];
+    this.addRecord = function()
+    {
+      this.receipt.addRecord(this.record_obj_name.value,
+        this.record_obj_quantity.value,
+        this.record_obj_price.value);
+    }
     this.add_record_button.onclick = this.addRecord.bind(this);
-
   }
   // Metoda pobiera pola formularza, waliduje je i jeżeli dane są prawidłowe, dodaje je do struktury paragonu 
 
@@ -141,5 +145,7 @@ class Form
       return false;
     }
     return true;
-  }
+ }
 let receipt = new Receipt()
+let Form = new Form(receipt);
+
