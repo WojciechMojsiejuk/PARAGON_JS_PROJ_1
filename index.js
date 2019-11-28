@@ -25,7 +25,15 @@ class Receipt
       this.records.push(new Record(name, quantity, price));
     }
   }
-
+  total()
+  {
+    let total = 0;
+    for(let record in this.records)
+    {
+      total += record.price
+    }
+    return total
+  }
 }
 
 class Record
@@ -122,8 +130,8 @@ class Form
     
     if(string.length <= 0 )
     {
-      alert("Invalid " + string.toString())
       object.style.backgroundColor = "red";
+      alert("Invalid " + string.toString())
       return false;
     }
     return true;
@@ -134,20 +142,20 @@ class Form
   {
     if(isNaN(number))
     {
-      alert( number.toString() + " is not a number!")
       object.style.backgroundColor = "red";
+      alert( number.toString() + " is not a number!")
       return false;
     }
     if(number == null)
     {
-      alert("Empty " + number.toString() + " field")
       object.style.backgroundColor = "red";
+      alert("Empty " + number.toString() + " field")
       return false;
     }
     if(number < 0)
     {
-      alert(number.toString()+" must be a positive number")
       object.style.backgroundColor = "red";
+      alert(number.toString()+" must be a positive number")
       return false;
     }
     return true;
@@ -174,4 +182,9 @@ else
   alert("localStorage doesn't work your changes won't be saved")
 }
 
+// if (confirm('Are you sure you want to save this thing into the database?')){
+//     // Save it!
+// } else {
+//     // Do nothing!
+// }
 
