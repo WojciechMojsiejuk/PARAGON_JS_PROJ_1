@@ -64,49 +64,30 @@ class Form
     this.add_record_button = this.form_inputs[3];
     this.addRecord = function()
     {
-      this.receipt.addRecord(this.record_obj_name.value,
-        this.record_obj_quantity.value,
-        this.record_obj_price.value);
-    }
-    this.add_record_button.onclick = this.addRecord.bind(this);
-  }
-  // Metoda pobiera pola formularza, waliduje je i jeżeli dane są prawidłowe, dodaje je do struktury paragonu 
-
-  addRecord()
-  {
-    // Pobranie elementów
-
-    let name = this.record_obj_name.value;
-    let quantity = this.record_obj_quantity.value;
-    quantity = parseFloat(quantity.replace(',', '.'));
-    let price = this.record_obj_price.value;
-    price = parseFloat(price.replace(',', '.'));
-
-    // Czyszczenie styli
-
-    name.style.backgroundColor = null;
-    quantity.style.backgroundColor = null;
-    price.style.backgroundColor = null;
-    
-    // Jeżeli dane są prawidłowe, dodaj je do paragonu
-
-    if(validString(name, this.record_obj_name) && validNumber(quantity,this.record_obj_quantity) && validNumber(price, this.record_obj_price))
-    {
-      let record = new Record(name,quantity,price);
-      
-      // Wyzerowanie pól formularza
-
-      this.record_obj_name.value = "";
-      this.record_obj_quantity.value = "";
-      this.record_obj_price.value = "";
-
-      // Czyszczenie styli
-
+      let name = this.record_obj_name.value;
+      let quantity = parseFloat(this.record_obj_quantity.value.replace(',','.'));
+      let price = parseFloat(this.record_obj_price.value.replace(',', '.'));
+      //clear styles
       this.record_obj_name.style.backgroundColor = null;
       this.record_obj_quantity.style.backgroundColor = null;
       this.record_obj_price.style.backgroundColor = null;
+      //validate data
+      if(validString(name, this.record_obj_name) && validNumber(quantity, this.record_obj_quantity) && validNumber(price, this.record_obj_price))
+      {
+        //add record
+        this.receipt.addRecord(name, quantity, price);
+        //wyzerowanie pól formularza
+        this.record_obj_name.value = "";
+        this.record_obj_quantity.value = "";
+        this.record_obj_price.value = "";
 
+        //clear styles
+        this.record_obj_name.style.backgroundColor = null;
+        this.record_obj_quantity.style.backgroundColor = null;
+        this.record_obj_price.style.backgroundColor = null;
+      }
     }
+    this.add_record_button.onclick = this.addRecord.bind(this);
   }
 }
 
