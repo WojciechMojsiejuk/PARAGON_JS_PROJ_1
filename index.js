@@ -22,19 +22,27 @@ class Receipt
     this.records = new Array();
     this.update = function()
     {
+      //get <body>
       let parent = document.getElementById("ProductList");
+      //Clear section
+      parent.innerHTML = "";
+      //Add section
+      //loop through rows
       for(let i=0;i<this.records.length;i++)
       {
         let row = parent.insertRow();
+        let cells = new Array();
+        //loop through cells
         for(let j=0;j<5;j++)
         {
-          let cell = row.insertCell(j);
-          cell.innerText = "TEST"
-          //console.log(cell.innerText);
+          cells.push(row.insertCell(j));
         }
-        // let row = document.createElement('tr');
-        // row.innerText = records[i].name;
-        // parent.insertBefore(null, row);
+        //index
+        cells[0].innerText = i.toString();
+        cells[1].innerText = this.records[i].name;
+        cells[2].innerText = this.records[i].quantity;
+        cells[3].innerText = this.records[i].price;
+        cells[4].innerText = "Not calculated";
       }
     }
     this.addRecord = function(name, quantity, price)
@@ -42,15 +50,6 @@ class Receipt
       this.records.push(new Record(name, quantity, price));
       this.update();
     }
-  }
-  total()
-  {
-    let total = 0;
-    for(let record in this.records)
-    {
-      total += record.price
-    }
-    return total
   }
 }
 
@@ -161,8 +160,8 @@ class Form
     
     if(string.length <= 0 )
     {
-      object.style.backgroundColor = "red";
       alert("Invalid " + string.toString())
+      object.style.backgroundColor = "red";
       return false;
     }
     return true;
@@ -173,50 +172,24 @@ class Form
   {
     if(isNaN(number))
     {
-      object.style.backgroundColor = "red";
       alert( number.toString() + " is not a number!")
+      object.style.backgroundColor = "red";
       return false;
     }
     if(number == null)
     {
-      object.style.backgroundColor = "red";
       alert("Empty " + number.toString() + " field")
+      object.style.backgroundColor = "red";
       return false;
     }
     if(number < 0)
     {
-      object.style.backgroundColor = "red";
       alert(number.toString()+" must be a positive number")
+      object.style.backgroundColor = "red";
       return false;
     }
     return true;
  }
-
-let receipt;
-let form;
-if(localStorageTest())
-{
-  
-  if(localStorage.records == undefined)
-  {
-    receipt = new Receipt();
-  }
-  else
-  {
-    receipt = new Receipt(JSON.parse(localStorage.records))
-  }
-  
-  form = new Form(receipt);
-}
-else
-{
-  alert("localStorage doesn't work your changes won't be saved")
-}
-
-// if (confirm('Are you sure you want to save this thing into the database?')){
-//     // Save it!
-// } else {
-//     // Do nothing!
-// }
-
+let receipt = new Receipt()
+let Form = new Form(receipt);
 
