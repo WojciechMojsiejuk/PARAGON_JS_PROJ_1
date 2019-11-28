@@ -64,7 +64,7 @@ class Record
     this.sum;
     // TODO: implement here
     this.position = receipt_size+1;
-    update_sum()
+    this.update_sum()
   }
   set record_name(new_name)
   {
