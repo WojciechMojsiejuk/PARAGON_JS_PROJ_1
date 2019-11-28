@@ -17,9 +17,9 @@ function localStorageTest(){
 
 class Receipt
 {
-  constructor()
+  constructor(records=[])
   {
-    this.records = new Array();
+    this.records = records;
     this.addRecord = function(name, quantity, price)
     {
       this.records.push(new Record(name, quantity, price));
@@ -35,8 +35,10 @@ class Record
     this.name = name;
     this.quantity = quantity;
     this.price = price;
+    this.sum;
     // TODO: implement here
     this.position = receipt_size+1;
+    update_sum()
   }
   set record_name(new_name)
   {
@@ -48,8 +50,31 @@ class Record
   }
   set record_quantity(new_quantity)
   {
-    
     this.quantity = new_quantity;
+  }
+  get record_quantity()
+  {
+    return this.record_quantity
+  }
+  set record_price(new_price)
+  {
+    this.price = new_price
+  }
+  get record_price()
+  {
+    return this.price
+  }
+  set record_position(new_position)
+  {
+    this.position = new_position
+  }
+  get record_position()
+  {
+    return this.position
+  }
+  update_sum()
+  {
+    this.sum = Math.round(this.quantity*this.price, 2)
   }
 }
 class Form
@@ -146,6 +171,26 @@ class Form
     }
     return true;
  }
-let receipt = new Receipt()
-let Form = new Form(receipt);
+
+let receipt;
+let form;
+if(localStorageTest())
+{
+  
+  if(localStorage.records == undefined)
+  {
+    receipt = new Receipt();
+  }
+  else
+  {
+    receipt = new Receipt(JSON.parse(localStorage.records))
+  }
+  
+  form = new Form(receipt);
+}
+else
+{
+  alert("localStorage doesn't work your changes won't be saved")
+}
+
 
