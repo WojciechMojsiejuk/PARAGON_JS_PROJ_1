@@ -38,7 +38,7 @@ class Receipt
           cells.push(row.insertCell(j));
         }
         //index
-        cells[0].innerText = i.toString();
+        cells[0].innerText = (i+1).toString();
         cells[1].innerText = this.records[i].name;
         cells[2].innerText = this.records[i].quantity;
         cells[3].innerText = this.records[i].price;
@@ -207,7 +207,7 @@ class Form
       object.style.backgroundColor = "red";
       return false;
     }
-    if(number < 0)
+    if(number <= 0)
     {
       alert(number.toString()+" must be a positive number")
       object.style.backgroundColor = "red";
