@@ -29,19 +29,32 @@ class Receipt
       let parent = document.getElementById("ProductList");
       //Clear section
       parent.innerHTML = "";
+
       //Add section
       //loop through rows
       for(let i=0;i<this.records.length;i++)
       {
         let row = parent.insertRow();
+        //create up and down buttons
+        // let buttonUp = document.createElement("BUTTON");
+        // buttonUp.innerHTML = "↑";
+        // buttonUp.onClick = this.moveUp;
+        // let buttonDown = document.createElement("BUTTON");
+        // buttonDown.innerHTML = "↓";
+        parent.appendChild(this.records[i].buttonUp);
+        parent.appendChild(this.records[i].buttonDown);
+        //cells
         let cells = new Array();
         //loop through cells
         for(let j=0;j<5;j++)
         {
           cells.push(row.insertCell(j));
         }
-        //index
-        cells[0].innerText = i.toString();
+        //set buttons on click option
+        this.records[i].buttonUp.onclick = this.moveUp.bind(this);
+        this.records[i].buttonDown.onclick = this.moveDown.bind(this);
+        //set data
+        cells[0].innerText = (i+1).toString();
         cells[1].innerText = this.records[i].name;
         cells[2].innerText = this.records[i].quantity;
         cells[3].innerText = this.records[i].price;
@@ -69,25 +82,67 @@ class Receipt
       this.records.push(new Record(name, quantity, price));
       this.update();
     }
+    this.moveUp = function(event)
+    {
+      let index = -1;
+      for(let i=0;i<this.records.length;i++)
+      {
+        if(event.target == this.records[i].buttonUp)
+        {
+          index = i;
+          break;
+        }
+      }
+      console.log("Clicked button up index: " + index);
+      //only if this row is not a first row
+      if(index > 0)
+      {
+        let temp = this.records[index - 1];
+        this.records[index - 1] = this.records[index];
+        this.records[index] = temp;
+        this.update();
+      }
+    }
+    this.moveDown = function(event)
+    {
+      let index = -1;
+      for(let i=0;i<this.records.length;i++)
+      {
+        if(event.target == this.records[i].buttonDown)
+        {
+          index = i;
+          break;
+        }
+      }
+      console.log("Clicked button down index: " + index);
+      if(index < this.records.length - 1)
+      {
+        let temp = this.records[index + 1];
+        this.records[index + 1] = this.records[index];
+        this.records[index] = temp;
+        this.update();
+      }
+    }
     this.update()
-
-    
   }
 }
 
 class Record
 {
-    constructor(name, quantity, price, receipt_size)
+    constructor(name, quantity, price)
   {
     this.name = name;
     this.quantity = quantity;
     this.price = price;
     this.sum;
     // TODO: implement here
-    this.position = receipt_size+1;
     this.update_sum()
     this.close_button = document.createElement("button");
     this.close_button.innerHTML = "&times"
+    this.buttonUp = document.createElement("BUTTON");
+    this.buttonUp.innerHTML = "↑";
+    this.buttonDown = document.createElement("BUTTON");
+    this.buttonDown.innerHTML = "↓";
   }
   set record_name(new_name)
   {
@@ -197,7 +252,7 @@ class Form
       object.style.backgroundColor = "red";
       return false;
     }
-    if(number < 0)
+    if(number <= 0)
     {
       alert(number.toString()+" must be a positive number")
       object.style.backgroundColor = "red";
