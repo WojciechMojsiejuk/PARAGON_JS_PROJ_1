@@ -1,6 +1,6 @@
 // Import stylesheets
 import './style.css';
-
+localStorage.clear();
 // Write Javascript code!
 
 //Sprawdzenie czy przeglądarka obsługuje zapisywanie danych do local storage
@@ -41,8 +41,10 @@ class Receipt
         // buttonUp.onClick = this.moveUp;
         // let buttonDown = document.createElement("BUTTON");
         // buttonDown.innerHTML = "↓";
-        parent.appendChild(this.records[i].buttonUp);
-        parent.appendChild(this.records[i].buttonDown);
+        let navigationButtons = document.createElement("div");
+        navigationButtons.appendChild(this.records[i].buttonUp);
+        navigationButtons.appendChild(this.records[i].buttonDown);
+        parent.insertBefore(navigationButtons,row);
         //cells
         let cells = new Array();
         //loop through cells
@@ -53,6 +55,7 @@ class Receipt
         //set buttons on click option
         this.records[i].buttonUp.onclick = this.moveUp.bind(this);
         this.records[i].buttonDown.onclick = this.moveDown.bind(this);
+        this.records[i].buttonClose.onclick = this.deleteRecord.bind(this);
         //set data
         cells[0].innerText = (i+1).toString();
         cells[1].innerText = this.records[i].name;
@@ -60,10 +63,12 @@ class Receipt
         cells[3].innerText = this.records[i].price;
         // this.records[i].update_sum();
         cells[4].innerText = this.records[i].sum;
+        parent.appendChild(this.records[i].buttonClose)
       }
       let totalValue = this.total();
       console.log(totalValue)
       this.totalMessage.innerHTML = totalValue.toString() + 'zł'
+    
       localStorage.records = JSON.stringify(this.records);
     }
     
@@ -103,6 +108,7 @@ class Receipt
         this.update();
       }
     }
+
     this.moveDown = function(event)
     {
       let index = -1;
@@ -123,6 +129,28 @@ class Receipt
         this.update();
       }
     }
+
+
+    this.deleteRecord = function(event)
+    {
+      let index = -1;
+      for(let i=0;i<this.records.length;i++)
+      {
+        if(event.target == this.records[i].buttonUp)
+        {
+          index = i;
+          break;
+        }
+      }
+      if (confirm('Are you sure you want to delete this record?'))
+      {
+        this.records.splice(index,1);
+        this.update()
+      } else 
+      {
+    // Do nothing!
+      }
+    }
     this.update()
   }
 }
@@ -137,8 +165,8 @@ class Record
     this.sum;
     // TODO: implement here
     this.update_sum()
-    this.close_button = document.createElement("button");
-    this.close_button.innerHTML = "&times"
+    this.buttonClose = document.createElement("button");
+    this.buttonClose.innerHTML = "&times"
     this.buttonUp = document.createElement("BUTTON");
     this.buttonUp.innerHTML = "↑";
     this.buttonDown = document.createElement("BUTTON");
@@ -281,8 +309,3 @@ else
   alert("localStorage doesn't work your changes won't be saved")
 }
 
-// if (confirm('Are you sure you want to save this thing into the database?')){
-//     // Save it!
-// } else {
-//     // Do nothing!
-// }
