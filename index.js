@@ -1,6 +1,6 @@
 // Import stylesheets
 import './style.css';
-localStorage.clear();
+// localStorage.clear();
 // Write Javascript code!
 
 //Sprawdzenie czy przeglądarka obsługuje zapisywanie danych do local storage
@@ -19,18 +19,85 @@ class Receipt
 {
   constructor(records=[])
   {
-  
-    this.totalMessage = document.getElementsByClassName("razem")[1];
-    if(records && records.length)
+    //methods
+
+    this.total = function()
     {
-      for(let i=0;i<records.length;i++)
+      let total = 0;
+      for(let i=0; i<this.records.length;i++)
       {
-        addRecord(records[i].name, records[i].quantity, records[i].position)
+        total += this.records[i].sum
+      }
+      return total
+    }
+    
+    this.moveUp = function(event)
+    {
+      let index = -1;
+      for(let i=0;i<this.records.length;i++)
+      {
+        if(event.target == this.records[i].buttonUp)
+        {
+          index = i;
+          break;
+        }
+      }
+      console.log("Clicked button up index: " + index);
+      //only if this row is not a first row
+      if(index > 0)
+      {
+        let temp = this.records[index - 1];
+        this.records[index - 1] = this.records[index];
+        this.records[index] = temp;
+        this.update();
       }
     }
-    else
+
+    this.moveDown = function(event)
     {
-      this.records = new Array();
+      let index = -1;
+      for(let i=0;i<this.records.length;i++)
+      {
+        if(event.target == this.records[i].buttonDown)
+        {
+          index = i;
+          break;
+        }
+      }
+      console.log("Clicked button down index: " + index);
+      if(index < this.records.length - 1)
+      {
+        let temp = this.records[index + 1];
+        this.records[index + 1] = this.records[index];
+        this.records[index] = temp;
+        this.update();
+      }
+    }
+
+
+    this.deleteRecord = function(event)
+    {
+      let index = -1;
+      for(let i=0;i<this.records.length;i++)
+      {
+        if(event.target == this.records[i].buttonClose)
+        {
+          index = i;
+          break;
+        }
+      }
+      if (confirm('Are you sure you want to delete this record?'))
+      {
+        console.log(index)
+        this.records.splice(index,1);
+        this.update()
+      } 
+    }
+
+    this.addRecord = function(name, quantity, price)
+    {
+      this.records.push(new Record(name, quantity, price));
+      this.update();
     }
 
     this.update = function()
@@ -96,84 +163,14 @@ class Receipt
       localStorage.records = JSON.stringify(this.records);
     }
     
-
-    this.total = function()
+    this.records = new Array();
+    this.totalMessage = document.getElementsByClassName("razem")[1];
+    
+    if(records && records.length)
     {
-      let total = 0;
-      for(let i=0; i<this.records.length;i++)
+      for(let i=0;i<records.length;i++)
       {
-        total += this.records[i].sum
-      }
-    return total
-    }
-    this.addRecord = function(name, quantity, price)
-    {
-      this.records.push(new Record(name, quantity, price));
-      this.update();
-    }
-    this.moveUp = function(event)
-    {
-      let index = -1;
-      for(let i=0;i<this.records.length;i++)
-      {
-        if(event.target == this.records[i].buttonUp)
-        {
-          index = i;
-          break;
-        }
-      }
-      console.log("Clicked button up index: " + index);
-      //only if this row is not a first row
-      if(index > 0)
-      {
-        let temp = this.records[index - 1];
-        this.records[index - 1] = this.records[index];
-        this.records[index] = temp;
-        this.update();
-      }
-    }
-
-    this.moveDown = function(event)
-    {
-      let index = -1;
-      for(let i=0;i<this.records.length;i++)
-      {
-        if(event.target == this.records[i].buttonDown)
-        {
-          index = i;
-          break;
-        }
-      }
-      console.log("Clicked button down index: " + index);
-      if(index < this.records.length - 1)
-      {
-        let temp = this.records[index + 1];
-        this.records[index + 1] = this.records[index];
-        this.records[index] = temp;
-        this.update();
-      }
-    }
-
-
-    this.deleteRecord = function(event)
-    {
-      let index = -1;
-      for(let i=0;i<this.records.length;i++)
-      {
-        if(event.target == this.records[i].buttonClose)
-        {
-          index = i;
-          break;
-        }
-      }
-      if (confirm('Are you sure you want to delete this record?'))
-      {
-        console.log(index)
-        this.records.splice(index,1);
-        this.update()
-      } else 
-      {
-    // Do nothing!
+        this.addRecord(records[i].name, records[i].quantity, records[i].price)
       }
     }
     this.update()
