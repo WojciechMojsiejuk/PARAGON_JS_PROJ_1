@@ -19,6 +19,8 @@ class Receipt
 {
   constructor(records=[])
   {
+    //onfocus old value
+    let old_value;
     //methods
 
     this.total = function()
@@ -100,6 +102,49 @@ class Receipt
       this.update();
     }
 
+    this.editField = function(record, field_name)
+    {
+      if (confirm('Are you sure you want to edit this field?'))
+      {
+        console.log(event.target.innerText)
+        switch(field_name)
+        {
+          case 'name':
+          if(validString(event.target.innerText, event.target))
+          {
+            record.name=event.target.innerText
+          }
+          else
+          {
+            alert('String must not be empty')
+          }
+          break
+          case 'quantity':
+          let new_quantity = parseFloat(event.target.innerText.replace(',','.'));
+          if(validNumber(new_quantity, event.target))
+          {
+            record.quantity = new_quantity;
+          }
+          else
+          {
+            alert("Quantity must be a positive number")
+          }
+          break
+          case 'price':
+          let new_price = parseFloat(event.target.innerText.replace('zł',''));
+          if(validNumber(new_price, event.target))
+          {
+            record.price = new_price;
+          }
+          else
+          {
+            alert("Price must be a positive number, might end with zł ")
+          }
+        }
+      }
+      this.update() 
+      
+    }
     this.update = function()
     {
       //get <body>
@@ -133,9 +178,15 @@ class Receipt
         //set data
         cells[0].innerText = (i+1).toString();
         cells[1].innerText = this.records[i].name;
+        cells[1].setAttribute('contenteditable','true');
+        cells[1].onfocusout= function(){this.editField(this.records[i], 'name')}.bind(this);
         cells[2].innerText = this.records[i].quantity;
+        cells[2].setAttribute('contenteditable','true');
+        cells[2].onfocusout= function(){this.editField(this.records[i], 'quantity')}.bind(this);
         cells[3].innerText = this.records[i].price + ' zł';
-        // this.records[i].update_sum();
+        cells[3].setAttribute('contenteditable','true');
+        cells[3].onfocusout= function(){this.editField(this.records[i], 'price')}.bind(this);
+        this.records[i].update_sum();
         cells[4].innerText = this.records[i].sum + ' zł';
 
         let navigationButtons = document.createElement("div");
@@ -277,8 +328,14 @@ class Form
   // Funkcja waliduje dane podane w formularzu
   function validString(string, object)
   {
-    
-    if(string.length <= 0 )
+    console.log(string)
+    console.log(string.length)
+    console.log(object)
+    let regex = new RegExp('/[\r\n]+/gm')
+    string = string.replace(regex,'')
+    console.log(string)
+    console.log(string.length)
+    if(string.length <= 0  && string != "")
     {
       alert("Invalid " + string.toString())
       object.style.backgroundColor = "red";
