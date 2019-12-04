@@ -26,7 +26,7 @@ class Receipt {
       for (let i = 0; i < this.records.length; i++) {
         total += this.records[i].sum;
       }
-      return total;
+      return Math.round(total*100)/100;;
     };
 
     this.moveUp = function(event) {
@@ -253,7 +253,7 @@ class Record {
     return this.position;
   }
   update_sum() {
-    this.sum = Math.round(this.quantity * this.price, 2);
+    this.sum = Math.round(this.quantity * this.price * 100)/100;
   }
   get record_sum() {
     return this.sum;
