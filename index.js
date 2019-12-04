@@ -21,7 +21,17 @@ class Receipt
   {
   
     this.totalMessage = document.getElementsByClassName("razem")[1];
-    this.records = records
+    if(records && records.length)
+    {
+      for(let i=0;i<records.length;i++)
+      {
+        addRecord(records[i].name, records[i].quantity, records[i].position)
+      }
+    }
+    else
+    {
+      this.records = new Array();
+    }
 
     this.update = function()
     {
@@ -41,14 +51,12 @@ class Receipt
         // buttonUp.onClick = this.moveUp;
         // let buttonDown = document.createElement("BUTTON");
         // buttonDown.innerHTML = "↓";
-        let navigationButtons = document.createElement("div");
-        navigationButtons.appendChild(this.records[i].buttonUp);
-        navigationButtons.appendChild(this.records[i].buttonDown);
-        parent.insertBefore(navigationButtons,row);
+        console.log(this.records)
+
         //cells
         let cells = new Array();
         //loop through cells
-        for(let j=0;j<5;j++)
+        for(let j=0;j<6;j++)
         {
           cells.push(row.insertCell(j));
         }
@@ -60,15 +68,34 @@ class Receipt
         cells[0].innerText = (i+1).toString();
         cells[1].innerText = this.records[i].name;
         cells[2].innerText = this.records[i].quantity;
-        cells[3].innerText = this.records[i].price;
+        cells[3].innerText = this.records[i].price + ' zł';
         // this.records[i].update_sum();
-        cells[4].innerText = this.records[i].sum;
-        parent.appendChild(this.records[i].buttonClose)
+        cells[4].innerText = this.records[i].sum + ' zł';
+
+        let navigationButtons = document.createElement("div");
+        navigationButtons.style.width='50%';
+        navigationButtons.style.cssFloat='left';
+        navigationButtons.appendChild(this.records[i].buttonUp);
+        navigationButtons.appendChild(this.records[i].buttonDown);
+
+        let deleteButton = document.createElement("div");
+        deleteButton.style.width='50%';
+        deleteButton.style.cssFloat='left';
+        deleteButton.appendChild(this.records[i].buttonClose);
+    
+        
+        let allButtons = document.createElement("div");
+        allButtons.appendChild(navigationButtons);
+        allButtons.appendChild(deleteButton);
+        cells[5].style.backgroundColor = 'rgb(255,255,255)';
+        cells[5].style.width='80px';
+
+        cells[5].appendChild(allButtons)
       }
       let totalValue = this.total();
       console.log(totalValue)
       this.totalMessage.innerHTML = totalValue.toString() + 'zł'
-    
+      console.log(this.records)
       localStorage.records = JSON.stringify(this.records);
     }
     
