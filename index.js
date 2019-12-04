@@ -51,7 +51,6 @@ class Receipt
         // buttonUp.onClick = this.moveUp;
         // let buttonDown = document.createElement("BUTTON");
         // buttonDown.innerHTML = "↓";
-        console.log(this.records)
 
         //cells
         let cells = new Array();
@@ -93,9 +92,7 @@ class Receipt
         cells[5].appendChild(allButtons)
       }
       let totalValue = this.total();
-      console.log(totalValue)
       this.totalMessage.innerHTML = totalValue.toString() + 'zł'
-      console.log(this.records)
       localStorage.records = JSON.stringify(this.records);
     }
     
@@ -163,7 +160,7 @@ class Receipt
       let index = -1;
       for(let i=0;i<this.records.length;i++)
       {
-        if(event.target == this.records[i].buttonUp)
+        if(event.target == this.records[i].buttonClose)
         {
           index = i;
           break;
@@ -171,6 +168,7 @@ class Receipt
       }
       if (confirm('Are you sure you want to delete this record?'))
       {
+        console.log(index)
         this.records.splice(index,1);
         this.update()
       } else 
