@@ -90,12 +90,12 @@ class Receipt {
         switch (field_name) {
           case "name":
             if (validString(event.target.textContent, event.target)) {
-              record.name = event.target.innerText;
+              record.name = event.target.textContent;
             }
             break;
           case "quantity":
             let new_quantity = parseFloat(
-              event.target.innerText.replace(",", ".")
+              event.target.textContent.replace(",", ".")
             );
             if (validNumber(new_quantity, event.target)) {
               record.quantity = new_quantity;
@@ -103,7 +103,7 @@ class Receipt {
             break;
           case "price":
             let new_price = parseFloat(
-              event.target.innerText.replace("zł", "")
+              event.target.textContent.replace("zł", "")
             );
 
             if (validNumber(new_price, event.target)) {
@@ -136,26 +136,26 @@ class Receipt {
         this.records[i].buttonDown.onclick = this.moveDown.bind(this);
         this.records[i].buttonClose.onclick = this.deleteRecord.bind(this);
         //set data
-        cells[0].innerText = (i + 1).toString();
-        cells[1].innerText = this.records[i].name;
+        cells[0].textContent = (i + 1).toString();
+        cells[1].textContent = this.records[i].name;
         cells[1].setAttribute("contenteditable", "true");
         cells[1].addEventListener("focusout", event => {
           this.editField(this.records[i], 'name');
         });
-        cells[2].innerText = this.records[i].quantity;
+        cells[2].textContent = this.records[i].quantity;
         cells[2].setAttribute("contenteditable", "true");
         cells[2].addEventListener("focusout", event =>
         {
           this.editField(this.records[i], "quantity");
         });
-        cells[3].innerText = this.records[i].price + " zł";
+        cells[3].textContent = this.records[i].price + " zł";
         cells[3].setAttribute("contenteditable", "true");
         cells[3].addEventListener("focusout", event =>
         {
           this.editField(this.records[i], "price");
         });
         this.records[i].update_sum();
-        cells[4].innerText = this.records[i].sum + " zł";
+        cells[4].textContent = this.records[i].sum + " zł";
 
         let navigationButtons = document.createElement("div");
         navigationButtons.style.width = "50%";
