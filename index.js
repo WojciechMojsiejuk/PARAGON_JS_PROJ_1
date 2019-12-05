@@ -1,6 +1,6 @@
 // Import stylesheets
 import "./style.css";
- //localStorage.clear();
+//  localStorage.clear();
 // Write Javascript code!
 
 //Sprawdzenie czy przeglądarka obsługuje zapisywanie danych do local storage
@@ -26,7 +26,7 @@ class Receipt {
       for (let i = 0; i < this.records.length; i++) {
         total += this.records[i].sum;
       }
-      return Math.round(total*100)/100;;
+      return Math.round(total*100)/100;
     };
 
     this.moveUp = function(event) {
@@ -92,8 +92,6 @@ class Receipt {
           case "name":
             if (validString(event.target.innerText, event.target)) {
               record.name = event.target.innerText;
-            } else {
-              alert("String must not be empty");
             }
             break;
           case "quantity":
@@ -102,19 +100,17 @@ class Receipt {
             );
             if (validNumber(new_quantity, event.target)) {
               record.quantity = new_quantity;
-            } else {
-              alert("Quantity must be a positive number");
             }
             break;
           case "price":
             let new_price = parseFloat(
               event.target.innerText.replace("zł", "")
             );
+
             if (validNumber(new_price, event.target)) {
               record.price = new_price;
-            } else {
-              alert("Price must be a positive number, might end with zł ");
             }
+            break;
         }
       }
       this.update();
@@ -129,12 +125,6 @@ class Receipt {
       //loop through rows
       for (let i = 0; i < this.records.length; i++) {
         let row = parent.insertRow();
-        //create up and down buttons
-        // let buttonUp = document.createElement("BUTTON");
-        // buttonUp.innerHTML = "↑";
-        // buttonUp.onClick = this.moveUp;
-        // let buttonDown = document.createElement("BUTTON");
-        // buttonDown.innerHTML = "↓";
 
         //cells
         let cells = new Array();
@@ -153,27 +143,18 @@ class Receipt {
         cells[1].addEventListener("focusout", event => {
           this.editField(this.records[i], 'name');
         });
-        // cells[1].setAttribute('onfocusout',"function(){this.editField(this.records[i], 'name')}.bind");
-        //cells[1].onfocusout = fucntion(){ console.log("on foucs out!!!"); };
-         //cells[1].onfocusout= function(){this.editField(this.records[i], 'name')}.bind(this);
         cells[2].innerText = this.records[i].quantity;
         cells[2].setAttribute("contenteditable", "true");
         cells[2].addEventListener("focusout", event =>
         {
           this.editField(this.records[i], "quantity");
         });
-        // cells[2].onfocusout = function() {
-        //   this.editField(this.records[i], "quantity");
-        // }.bind(this);
         cells[3].innerText = this.records[i].price + " zł";
         cells[3].setAttribute("contenteditable", "true");
         cells[3].addEventListener("focusout", event =>
         {
           this.editField(this.records[i], "price");
         });
-        // cells[3].onfocusout = function() {
-        //   this.editField(this.records[i], "price");
-        // }.bind(this);
         this.records[i].update_sum();
         cells[4].innerText = this.records[i].sum + " zł";
 
@@ -310,7 +291,7 @@ function validString(string, object) {
   console.log(string);
   console.log(string.length);
   if (string.length <= 0 || string == "") {
-    alert("Invalid " + string.toString());
+    alert("Name can not be empty");
     object.style.backgroundColor = "red";
     return false;
   }
@@ -319,18 +300,18 @@ function validString(string, object) {
 
 // Funkcja waliduje liczby zmiennoprzecinkowe w formularzu
 function validNumber(number, object) {
+  if (number == null) {
+    alert("This field can not be empty ");
+    object.style.backgroundColor = "red";
+    return false;
+  }
   if (isNaN(number)) {
     alert(number.toString() + " is not a number!");
     object.style.backgroundColor = "red";
     return false;
   }
-  if (number == null) {
-    alert("Empty " + number.toString() + " field");
-    object.style.backgroundColor = "red";
-    return false;
-  }
   if (number <= 0) {
-    alert(number.toString() + " must be a positive number");
+    alert(number.toString() + " is not a positive number");
     object.style.backgroundColor = "red";
     return false;
   }
@@ -347,5 +328,5 @@ if (localStorageTest()) {
 
   form = new Form(receipt);
 } else {
-  alert("localStorage doesn't work your changes won't be saved");
+  alert("localStorage doesn't work, your changes won't be saved");
 }
