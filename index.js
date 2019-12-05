@@ -87,10 +87,9 @@ class Receipt {
     this.editField = function(record, field_name) {
       console.log("Edit field function called");
       if (confirm("Are you sure you want to edit this field?")) {
-        console.log(event.target.innerText);
         switch (field_name) {
           case "name":
-            if (validString(event.target.innerText, event.target)) {
+            if (validString(event.target.textContent, event.target)) {
               record.name = event.target.innerText;
             }
             break;
@@ -290,7 +289,7 @@ function validString(string, object) {
   string = string.replace(regex, "");
   console.log(string);
   console.log(string.length);
-  if (string.length <= 0 || string == "") {
+  if (string.length <= 0 || string == "" || string == " " || string == "<br>") {
     alert("Name can not be empty");
     object.style.backgroundColor = "red";
     return false;
