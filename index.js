@@ -106,7 +106,7 @@ class Receipt {
               event.target.textContent.replace("zł", "")
             );
 
-            if (validNumber(new_price, event.target)) {
+            if (validPrice(new_price, event.target)) {
               record.price = new_price;
             }
             break;
@@ -261,7 +261,7 @@ class Form {
       if (
         validString(name, this.record_obj_name) &&
         validNumber(quantity, this.record_obj_quantity) &&
-        validNumber(price, this.record_obj_price)
+        validPrice(price, this.record_obj_price)
       ) {
         //add record
         this.receipt.addRecord(name, quantity, price);
@@ -316,6 +316,36 @@ function validNumber(number, object) {
   }
   return true;
 }
+
+function validPrice(number, object) {
+  if (number == null) {
+    alert("This field can not be empty ");
+    object.style.backgroundColor = "red";
+    return false;
+  }
+  if (isNaN(number)) {
+    alert(number.toString() + " is not a number!");
+    object.style.backgroundColor = "red";
+    return false;
+  }
+  if (number <= 0) {
+    alert(number.toString() + " is not a positive number");
+    object.style.backgroundColor = "red";
+    return false;
+  }
+  let temp = ''+number
+  if(!Number.isInteger(number))
+  {
+    if(temp.split(".")[1].length >= 3)
+    {
+      alert(number.toString() + " can only have 2 decimal places");
+      object.style.backgroundColor = "red";
+      return false;
+    }  
+  }
+  return true;
+}
+
 let receipt;
 let form;
 if (localStorageTest()) {
